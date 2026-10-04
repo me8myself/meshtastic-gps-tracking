@@ -14,7 +14,18 @@ base = f"http://127.0.0.1:{port}"
 out = subprocess.run([exe, "tiles", "--help"], capture_output=True, text=True, stdin=subprocess.DEVNULL, timeout=120)
 assert out.returncode == 0 and "--radius-km" in out.stdout, out.stdout + out.stderr
 
-with tempfile.TemporaryDirectory() as tmp:
+
+def stop(proc: subprocess.Popen) -> None:
+    """Stop the executable. A one-file build on Windows is a launcher plus a child process,
+    and terminate() only reaches the launcher, so kill the whole process tree there."""
+    if sys.platform == "win32":
+        subprocess.run(["taskkill", "/T", "/F", "/PID", str(proc.pid)], capture_output=True)
+    else:
+        proc.terminate()
+    proc.wait(timeout=30)
+
+
+with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
     proc = subprocess.Popen(
         [exe, "--demo", "--no-browser", "--http-port", str(port), "--tiles-dir", f"{tmp}/tiles", "--log-dir", f"{tmp}/logs"],
         stdin=subprocess.DEVNULL,
@@ -37,5 +48,4 @@ with tempfile.TemporaryDirectory() as tmp:
             assert urllib.request.urlopen(base + path, timeout=5).status == 200, path
         print(f"OK: {len(state['nodes'])} nodes, connection {state['connection']['status']}")
     finally:
-        proc.terminate()
-        proc.wait(timeout=30)
+        stop(proc)
