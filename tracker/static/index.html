@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Mesh Tracker</title>
+  <link rel="stylesheet" href="/static/vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header id="topbar">
+    <button id="btn-list" class="icon-btn" title="Show/hide device list">☰</button>
+    <div class="brand">Mesh Tracker</div>
+    <div id="conn" class="pill" title="Radio connection"><span class="dot"></span><span id="conn-text">Starting…</span></div>
+    <button id="base-chip" class="chip" title="The radio this computer is connected to">
+      <span class="chip-label">Base</span> <span id="base-name">—</span> <span id="base-batt"></span>
+    </button>
+    <div class="spacer"></div>
+    <button id="btn-fit" class="btn" title="Zoom to show all devices">Fit<span class="long"> all</span></button>
+    <button id="btn-units" class="btn" title="Switch units">Metric</button>
+    <button id="btn-offline" class="btn" title="Save map imagery for offline use"><span class="long">Offline </span>Map</button>
+  </header>
+
+  <main>
+    <aside id="list-panel">
+      <div class="panel-title">Devices <span id="node-count" class="muted"></span></div>
+      <div id="node-list"></div>
+      <div id="list-footer" class="muted small"></div>
+    </aside>
+    <div id="map"></div>
+    <aside id="detail-panel" class="hidden">
+      <div class="detail-head">
+        <div id="detail-title"></div>
+        <button id="btn-close-detail" class="icon-btn" title="Close">✕</button>
+      </div>
+      <div id="detail-actions">
+        <button id="btn-follow" class="btn small">Follow</button>
+        <button id="btn-reset" class="btn small" title="Clear the trail and flight stats for this device">Reset trail</button>
+        <a id="btn-gpx" class="btn small" href="#" download>GPX</a>
+        <a id="btn-csv" class="btn small" href="#" download>CSV</a>
+      </div>
+      <div id="detail-body"></div>
+    </aside>
+    <div id="banner" class="hidden"></div>
+  </main>
+
+  <dialog id="offline-dialog">
+    <form method="dialog" id="offline-form">
+      <h3>Save map for offline use</h3>
+      <p class="small muted">Downloads satellite imagery for the area currently shown on the map so it works
+        at the field without internet. This computer needs internet access while downloading.</p>
+      <div class="row">
+        <label>From zoom <input type="number" id="dl-min" min="1" max="20" value="10"></label>
+        <label>to zoom <input type="number" id="dl-max" min="1" max="20" value="18"></label>
+      </div>
+      <p id="dl-estimate" class="small"></p>
+      <div id="dl-progress" class="hidden"><div class="bar"><div id="dl-bar"></div></div><div id="dl-text" class="small"></div></div>
+      <p id="dl-tiles-info" class="small muted"></p>
+      <div class="row end">
+        <button type="button" id="dl-cancel" class="btn">Close</button>
+        <button type="button" id="dl-start" class="btn primary">Download</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="/static/vendor/leaflet/leaflet.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>
