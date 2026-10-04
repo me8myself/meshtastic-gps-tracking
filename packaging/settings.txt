@@ -1,0 +1,21 @@
+# MeshTracker settings
+# Options here are used when MeshTracker is started without any (e.g. double-clicked).
+# Remove the # in front of a line to use it. Run "MeshTracker --help" for every option.
+
+# Radio on a specific USB port (Device Manager > Ports shows the COM number):
+# --port COM5
+
+# Radio over WiFi:
+# --host 192.168.1.50
+
+# Radio over Bluetooth:
+# --ble
+
+# Try it without a radio (simulated plane):
+# --demo
+
+# Let phones/tablets on the same network open the map (http://<this PC's IP>:8080):
+# --listen 0.0.0.0
+
+# Use a different web port if 8080 is taken:
+# --http-port 8081
