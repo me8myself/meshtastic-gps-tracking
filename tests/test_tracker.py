@@ -238,3 +238,11 @@ def test_mesh_connection_reports_missing_radio(monkeypatch):
         assert "no Meshtastic USB device" in tr.connection["detail"]
     finally:
         conn.stop()
+
+
+def test_settings_file(tmp_path, monkeypatch):
+    from tracker import __main__ as cli
+
+    (tmp_path / "settings.txt").write_text('# comment\n--port COM5\n\n--ble "My Radio"  # trailing\n')
+    monkeypatch.setattr(cli, "app_dir", lambda: str(tmp_path))
+    assert cli.read_settings_file() == ["--port", "COM5", "--ble", "My Radio"]

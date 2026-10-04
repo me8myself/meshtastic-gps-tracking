@@ -21,7 +21,46 @@ live map in your web browser:
 - **Metric or imperial** units.
 - **Phones and tablets** work too: run with `--listen 0.0.0.0` and open the page on another device.
 
-## Quick start
+## Windows: ready-to-run MeshTracker.exe
+
+There's no need to install Python. Download **MeshTracker.exe** from the repository's
+[Releases page](../../releases), or from the **Build executables** run on the
+[Actions tab](../../actions) (artifact `MeshTracker-windows`).
+
+1. Put `MeshTracker.exe` in its own folder, for example `C:\MeshTracker`.
+2. Plug in the radio and **double-click MeshTracker.exe**. A console window shows the status and your
+   browser opens the map. Close the console window to stop the tracker.
+3. Maps and logs are kept next to the program in `tiles\` and `logs\`.
+
+To change options without typing commands, put a `settings.txt` next to the .exe. One is included in the
+download; remove the `#` in front of the lines you want:
+
+```
+--port COM5
+--listen 0.0.0.0
+```
+
+From a command prompt in that folder you can also run:
+
+```
+MeshTracker.exe --demo                                  simulated plane, no radio needed
+MeshTracker.exe --port COM5                             radio on a specific port
+MeshTracker.exe tiles --lat 45.39 --lon -75.70 --radius-km 2   download the offline map
+MeshTracker.exe --help                                  every option
+```
+
+Windows SmartScreen may warn about an unrecognised app the first time, because the .exe isn't code-signed.
+Click **More info → Run anyway**. If no COM port appears in Device Manager when the radio is plugged in,
+install its USB driver (CP210x or CH340/CH9102 for most Heltec and T-Beam boards).
+
+To build the executable yourself (on Windows for a .exe; on Linux or macOS it builds a native binary):
+
+```bash
+pip install -r requirements.txt pyinstaller
+pyinstaller packaging/MeshTracker.spec      # output: dist/MeshTracker.exe
+```
+
+## Quick start (running from source)
 
 Requires Python 3.9 or newer.
 
@@ -155,6 +194,8 @@ tracker/
   server.py     web server: UI, REST API, WebSocket live updates, map tiles
   tiles.py      offline tile store, fallback from lower zoom levels, tile downloader
   simulator.py  --demo mode
+packaging/      PyInstaller spec, default settings.txt and smoke test for the executable
+.github/workflows/build-windows.yml   builds MeshTracker.exe (and a Linux binary) on every push
   static/       web UI (Leaflet is bundled, so no internet is needed)
 tests/          pytest suite
 ```
